@@ -1,19 +1,21 @@
 {
   "name": "notif",
   "version": "0.0.1",
-  "description": "Notify you through OS X notification center when a server is down or unreachable",
+  "description": "Notifies you through OS X notification center when a server is down or unreachable",
   "repository": {
     "type": "git",
     "url": "https://github.com/iharosi/notif.git"
   },
   "main": "ping.js",
   "scripts": {
-    "start": "node ping 192.168.1.1"
+    "start": "node ping"
   },
   "author": "Gergely Iharosi",
-  "license": "ISC",
+  "license": "AGPL-3.0",
   "dependencies": {
-    "display-notification": "^1.0.2",
-    "net-ping": "^1.1.11"
+    "cli-color": "^1.2.0",
+    "display-notification": "^2.0.0",
+    "net-ping": "^1.2.1",
+    "time-stamp": "^2.0.0"
   }
 }
