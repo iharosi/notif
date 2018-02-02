@@ -1,40 +1,54 @@
-/*jshint node:true */
+#!/usr/local/bin/node
+
 'use strict';
 
-if (process.argv.length < 3) {
-    console.log ('usage: node ping <target> [<target> ...]');
-    process.exit (-1);
+const c = require('cli-color');
+const displayNotification = require('display-notification');
+const ping = require('net-ping');
+const timestamp = require('time-stamp');
+
+const servers = [
+    '127.0.0.1'
+];
+
+if (process.argv.length < 3 && servers.length === 0) {
+    console.log('usage: node ping <target> [<target> ...]');
+    process.exit(-1);
 }
 
-var ping = require('net-ping');
-var displayNotification = require('display-notification');
-
-var session = ping.createSession({ packetSize: 56 });
-
-var notif = function(msg) {
+const session = ping.createSession({packetSize: 56});
+const notif = function(msg) {
     displayNotification({
         title: 'Server Info',
         text: msg,
         sound: 'Submarine'
     });
 };
-
-var pingloop = function(target, laststate) {
-    session.pingHost(target, function(error, target) {
-        error = error ? error.toString() : undefined;
+const pingloop = function(target, laststate) {
+    session.pingHost(target, function(error, ip) {
+        error = error ? error.toString() : error;
         if (laststate !== error) {
+            var time = timestamp('YYYY-MM-DD HH:mm:ss');
+
             if (error) {
-                console.log(target + ': ' + error);
-                notif(target + ': ' + error);
+                console.log(c.white(time) + ' ' + c.whiteBright(ip) + ' ' + c.magenta(error));
+                notif(ip + ': ' + error);
             } else {
-                console.log(target + ': Alive');
-                notif(target + ': Alive');
+                console.log(c.white(time) + ' ' + c.whiteBright(ip) + ' ' + c.green('Alive'));
+                notif(ip + ': Alive');
             }
         }
         setTimeout(pingloop.bind(null, target, error), 2000);
     });
 };
 
-process.argv.slice(2).map(function(ip) {
-    pingloop(ip);
-});
+if (process.argv.slice(2).length) {
+    process.argv.slice(2).forEach((ip) => {
+        pingloop(ip);
+    });
+} else {
+    servers.forEach((ip) => {
+        pingloop(ip);
+    });
+}
+
