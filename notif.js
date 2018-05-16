@@ -12,7 +12,7 @@ const servers = [
 ];
 
 if (process.argv.length < 3 && servers.length === 0) {
-    console.log('usage: node ping <target> [<target> ...]');
+    console.log('usage: notif <target> [<target> ...]');
     process.exit(-1);
 }
 

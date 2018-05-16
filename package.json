@@ -6,9 +6,9 @@
     "type": "git",
     "url": "https://github.com/iharosi/notif.git"
   },
-  "main": "ping.js",
+  "main": "notif.js",
   "scripts": {
-    "start": "node ping"
+    "start": "node notif"
   },
   "author": "Gergely Iharosi",
   "license": "AGPL-3.0",
