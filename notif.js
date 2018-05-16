@@ -1,20 +1,13 @@
-#!/usr/local/bin/node
+#!/usr/bin/env node
 
 'use strict';
 
-const c = require('cli-color');
-const displayNotification = require('display-notification');
+const c = require('chalk');
+const pkg = require('./package.json');
 const ping = require('net-ping');
+const program = require('commander');
 const timestamp = require('time-stamp');
-
-const servers = [
-    '127.0.0.1'
-];
-
-if (process.argv.length < 3 && servers.length === 0) {
-    console.log('usage: notif <target> [<target> ...]');
-    process.exit(-1);
-}
+const displayNotification = require('display-notification');
 
 const session = ping.createSession({packetSize: 56});
 const notif = function(msg) {
@@ -24,7 +17,7 @@ const notif = function(msg) {
         sound: 'Submarine'
     });
 };
-const pingloop = function(target, laststate) {
+const pingloop = (target, laststate) => {
     session.pingHost(target, function(error, ip) {
         error = error ? error.toString() : error;
         if (laststate !== error) {
@@ -42,13 +35,18 @@ const pingloop = function(target, laststate) {
     });
 };
 
-if (process.argv.slice(2).length) {
-    process.argv.slice(2).forEach((ip) => {
-        pingloop(ip);
-    });
+program
+    .version(pkg.version)
+    .description('Whatch for online status changes through macOS built-in notification center.')
+    .usage('<ip ...>')
+    .command('notif <ip> [ip...]');
+
+program.parse(process.argv);
+
+if (program.args.length === 0) {
+    program.help();
 } else {
-    servers.forEach((ip) => {
+    program.args.forEach((ip) => {
         pingloop(ip);
     });
 }
-

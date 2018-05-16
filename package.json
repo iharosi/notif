@@ -1,7 +1,7 @@
 {
   "name": "notif",
   "version": "0.0.1",
-  "description": "Notifies you through OS X notification center when a server is down or unreachable",
+  "description": "Whatch for online status changes through macOS built-in notification center.",
   "repository": {
     "type": "git",
     "url": "https://github.com/iharosi/notif.git"
@@ -10,10 +10,14 @@
   "scripts": {
     "start": "node notif"
   },
+  "bin": {
+    "notif": "./notif.js"
+  },
   "author": "Gergely Iharosi",
   "license": "AGPL-3.0",
   "dependencies": {
-    "cli-color": "^1.2.0",
+    "chalk": "^2.4.1",
+    "commander": "^2.15.1",
     "display-notification": "^2.0.0",
     "net-ping": "^1.2.1",
     "time-stamp": "^2.0.0"
